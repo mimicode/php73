@@ -38,4 +38,4 @@ mv /usr/local/src/composer.phar /usr/local/bin/composer && chmod +x /usr/local/b
 rm -rf /usr/local/src/nginx-files/* && rm -rf /usr/local/src/php-files/* && rm -rf /usr/local/src/config/*
 #CONFIG AUTO START
 CMD [ "/usr/local/php73/sbin/php-fpm -y /usr/local/php73/etc/php-fpm.d/www.conf" ]  
-EXPOSE 80 443 8801 8802 8803 8804
+EXPOSE 9000
