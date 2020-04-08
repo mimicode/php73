@@ -37,5 +37,5 @@ mv /usr/local/src/composer.phar /usr/local/bin/composer && chmod +x /usr/local/b
 #REMOVE FILES
 rm -rf /usr/local/src/nginx-files/* && rm -rf /usr/local/src/php-files/* && rm -rf /usr/local/src/config/*
 #CONFIG AUTO START
-CMD [ "/usr/local/php73/sbin/php-fpm -y /usr/local/php73/etc/php-fpm.d/www.conf" ]  
+CMD [ "/usr/local/php73/sbin/php-fpm","--nodaemonize","-c","/usr/local/php73/lib/php.ini","-y","/usr/local/php73/etc/php-fpm.d/www.conf" ]  
 EXPOSE 9000
