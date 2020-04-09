@@ -1,11 +1,12 @@
 FROM centos:7
 ENV PATH $PATH:/usr/local/bin
 #拷贝文件
-RUN mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.bak && \
-curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo && yum makecache && \
-echo 'export LC_ALL=C' >> ~/.bashrc && source ~/.bashrc && rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7 && yum -y install epel-release && yum install -y /usr/bin/applydeltarpm  wget gcc gcc-c++ ncurses ncurses-devel bison libgcrypt perl automake autoconf libtool make  libxml2 libxml2-devel libjpeg libjpeg-devel libpng libpng-devel freetype freetype-devel zlib zlib-devel glibc glibc-devel glib2 glib2-devel curl curl-devel php-mcrypt libmcrypt libmcrypt-devel openssl-devel gd mcrypt mhash libicu-devel && yum clean all  && \
+# mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.bak && \
+#curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo && yum makecache && \
+
+RUN echo 'export LC_ALL=C' >> ~/.bashrc && source ~/.bashrc && rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7 && yum -y install epel-release && yum install -y /usr/bin/applydeltarpm  wget gcc gcc-c++ ncurses ncurses-devel bison libgcrypt perl automake autoconf libtool make  libxml2 libxml2-devel libjpeg libjpeg-devel libpng libpng-devel freetype freetype-devel zlib zlib-devel glibc glibc-devel glib2 glib2-devel curl curl-devel php-mcrypt libmcrypt libmcrypt-devel openssl-devel gd mcrypt mhash libicu-devel && yum clean all  && \
 #COPY FILES  
-mkdir -p /usr/local/src && wget -O /usr/local/src/php73.tar.gz  https://blog.phpstu.com/source/php73/php73.tar.gz && tar zxvf  /usr/local/src/php73.tar.gz -C /usr/local/src  && \
+mkdir -p /usr/local/src && wget -O /usr/local/src/php73.tar.gz  https://github.com/mimicode/php73/raw/master/php73.tar.gz && tar zxvf  /usr/local/src/php73.tar.gz -C /usr/local/src  && \
 cd /usr/local/src/php-files && ls | xargs -n1 tar xzvf  && \
 # ADD USER
 groupadd www && useradd -r -g www www  && \ 
