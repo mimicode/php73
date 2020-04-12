@@ -1,5 +1,5 @@
 FROM centos:7
-ENV PATH $PATH:/usr/local/bin
+ENV PATH $PATH:/usr/local/bin:$HOME/.config/composer/vendor/bin
 #拷贝文件
 # mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.bak && \
 #curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo && yum makecache && \
@@ -34,7 +34,8 @@ cd /usr/local/src/php-files/swoole-src-4.4.17 &&  /usr/local/php73/bin/phpize  &
 # INSTALL PHPINIT
 mv /usr/local/src/phpunit-9.1.1.phar /usr/local/bin/phpunit && chmod +x /usr/local/bin/phpunit  && \
 # install composer
-mv /usr/local/src/composer.phar /usr/local/bin/composer && chmod +x /usr/local/bin/composer  && \
+curl -sS https://getcomposer.org/installer | php && \
+mv composer.phar /usr/local/bin/composer && \
 #REMOVE FILES
 rm -rf /usr/local/src/nginx-files/* && rm -rf /usr/local/src/php-files/* && rm -rf /usr/local/src/config/*
 #CONFIG AUTO START
