@@ -3,13 +3,15 @@ ENV PATH $PATH:/usr/local/bin:$HOME/.config/composer/vendor/bin
 #拷贝文件
 # mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.bak && \
 #curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo && yum makecache && \
+#COPY file_tar/ /usr/local/src/
 
-RUN echo 'export LC_ALL=C' >> ~/.bashrc && source ~/.bashrc && rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7 && yum -y install epel-release && yum install -y /usr/bin/applydeltarpm  wget gcc gcc-c++ ncurses ncurses-devel bison libgcrypt perl automake autoconf libtool make  libxml2 libxml2-devel libjpeg libjpeg-devel libpng libpng-devel freetype freetype-devel zlib zlib-devel glibc glibc-devel glib2 glib2-devel curl curl-devel php-mcrypt libmcrypt libmcrypt-devel openssl-devel gd mcrypt mhash libicu-devel && yum clean all  && \
+ 
+RUN echo 'export LC_ALL=C' >> ~/.bashrc && source ~/.bashrc && rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7 && yum -y install wget gcc gcc-c++ automake autoconf libtool make epel-release libxml2 libxml2-devel libjpeg libjpeg-devel libpng libpng-devel freetype freetype-devel zlib zlib-devel glibc glibc-devel glib2 glib2-devel curl curl-devel php-mcrypt libmcrypt libmcrypt-devel openssl-devel gd mcrypt mhash libicu-devel && yum clean all && \
 #COPY FILES  
-mkdir -p /usr/local/src && wget -O /usr/local/src/php73.tar.gz  https://github.com/mimicode/php73/raw/master/php73.tar.gz && tar zxvf  /usr/local/src/php73.tar.gz -C /usr/local/src  && \
-cd /usr/local/src/php-files && ls | xargs -n1 tar xzvf  && \
+mkdir -p /usr/local/src && wget -O /usr/local/src/php73.tar.gz  https://github.com/mimicode/php73/raw/master/php73.tar.gz && tar zxvf  /usr/local/src/php73.tar.gz -C /usr/local/src && \
+cd /usr/local/src/php-files && ls | xargs -n1 tar xzvf  &&\
 # ADD USER
-groupadd www && useradd -r -g www www  && \ 
+groupadd www && useradd -r -g www www &&\ 
 # install 7.3 ===
 # update libzip > 1.0 
 yum remove libzip -y  && \
@@ -30,14 +32,17 @@ cd /usr/local/src/php-files && tar zxvf /usr/local/src/php-files/apcu-5.1.11.tgz
 # CONFIG PHP7.3  
 ln -s /usr/local/php73/bin/php /usr/local/bin/php  && ln -s /usr/local/php73/sbin/php-fpm /usr/local/bin/php-fpm  && ln -s /usr/local/php73/bin/php-config /usr/bin/php-config && ln -s /usr/local/php73/bin/phpize /usr/bin/phpize  && \
 # install swoole
-cd /usr/local/src/php-files/swoole-src-4.4.17 &&  /usr/local/php73/bin/phpize  && ./configure --with-php-config=/usr/local/php73/bin/php-config --enable-openssl --enable-http2 &&  make && make install  && \
+cd /usr/local/src/php-files/swoole-src-4.4.17 &&  /usr/local/php73/bin/phpize  && ./configure --with-php-config=/usr/local/php73/bin/php-config --enable-openssl --enable-http2 &&  make && make install &&\
+#install xdebug
+wget -O /usr/local/src/php-files/xdebug-2.9.4.tgz  https://xdebug.org/files/xdebug-2.9.4.tgz && cd /usr/local/src/php-files && tar zxvf xdebug-2.9.4.tgz &&\
+cd /usr/local/src/php-files/xdebug-2.9.4 && /usr/local/php73/bin/phpize && ./configure --with-php-config=/usr/local/php73/bin/php-config --enable-xdebug && make && make install && \
 # INSTALL PHPINIT
-mv /usr/local/src/phpunit-9.1.1.phar /usr/local/bin/phpunit && chmod +x /usr/local/bin/phpunit  && \
+mv /usr/local/src/phpunit-9.1.1.phar /usr/local/bin/phpunit && chmod +x /usr/local/bin/phpunit &&\
 # install composer
 curl -sS https://getcomposer.org/installer | php && \
-mv composer.phar /usr/local/bin/composer && \
+mv composer.phar /usr/local/bin/composer &&\
 #REMOVE FILES
-rm -rf /usr/local/src/nginx-files/* && rm -rf /usr/local/src/php-files/* && rm -rf /usr/local/src/config/*
+rm -rf /usr/local/src/nginx-files/* && rm -rf /usr/local/src/php-files/* && rm -rf /usr/local/src/config/* \
 #CONFIG AUTO START
 CMD [ "/usr/local/php73/sbin/php-fpm","--nodaemonize","-c","/usr/local/php73/lib/php.ini","-y","/usr/local/php73/etc/php-fpm.d/www.conf" ]  
 EXPOSE 9000
